@@ -20,7 +20,7 @@ const Login = () => {
     try {
       const res = await API.post('/login', formData);
       localStorage.setItem('token', res.data.token);
-      navigate('/Contact');
+      navigate('/dashboard');
     } catch (error) {
       setError('Invalid email or password');
     }

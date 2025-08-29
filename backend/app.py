@@ -3,6 +3,8 @@ from flask_cors import CORS
 from routes.auth import auth_bp
 from routes.users import user_bp
 from routes.courses import course_bp
+from dotenv import load_dotenv
+load_dotenv()  # take environment variables from .env.
 
 app = Flask(__name__)
 CORS(app)

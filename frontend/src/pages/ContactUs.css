@@ -164,3 +164,26 @@
     font-size: 1.4rem;
   }
 }
+
+
+.details-with-logo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;   /* centers logo vertically */
+  gap: 2rem;
+}
+
+.details-text {
+  flex: 3;
+}
+
+.contact-logo {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.contact-logo img {
+  max-width: 220px;   /* bigger logo */
+  height: auto;
+}

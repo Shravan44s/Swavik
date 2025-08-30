@@ -35,8 +35,10 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/dashboard" className="navbar-logo" onClick={closeMenus}>
-          Swavik
+          <img src="/swavik.jpeg" alt="Swavik Logo" className="navbar-logo-image" />
+          <span className="navbar-title">Swavik</span>
         </Link>
+
 
         <div className="menu-icon" onClick={toggleMenu}>
           {menuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}

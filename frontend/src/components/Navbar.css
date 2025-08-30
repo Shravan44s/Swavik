@@ -14,10 +14,6 @@
   transition: background 0.3s ease;
 }
 
-.navbar:hover {
-  background: linear-gradient(135deg, #073f80, #081a2c);
-  box-shadow: 0 8px 20px rgba(33, 150, 243, 0.8);
-}
 
 .navbar-container {
   display: flex;
@@ -28,14 +24,16 @@
   align-items: center;
 }
 
-/* Logo */
 .navbar-logo {
+  display: flex;
+  align-items: center;     /* ✅ vertical alignment */
+  gap: 12px;               /* spacing between logo & text */
   color: #e3f2fd;
-  font-size: 2.1rem;
-  font-weight: 800;
-  letter-spacing: 3px;
+  font-size: 1.6rem;
+  font-weight: 1000;
+  letter-spacing: 1px;
   cursor: pointer;
-  user-select: none;
+  text-decoration: none;
   text-shadow:
     0 1px 0 #0d47a1,
     0 2px 5px rgba(21, 101, 192, 0.8);
@@ -44,10 +42,27 @@
 
 .navbar-logo:hover {
   color: #bbdefb;
-  transform: scale(1.1) rotate(-3deg);
   text-shadow:
     0 1px 0 #1565c0,
     0 3px 15px rgba(66, 165, 245, 0.9);
+  transform: scale(1.05);
+}
+
+/* Logo Image */
+.navbar-logo-image {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Logo Text */
+.navbar-title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #e3f2fd;
+  line-height: 1;
 }
 
 /* Menu icon (hamburger) */

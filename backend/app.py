@@ -14,7 +14,8 @@ CORS(app, resources={r"/*": {"origins": [
     "http://localhost:3000",      # React local dev
     "http://127.0.0.1:3000",      # sometimes React runs on this
     "https://www.swavik.co.in",   # your live domain
-    "https://swavik.co.in"        # without www
+    "https://swavik.co.in",      # without www
+    "https://swavik-xi.vercel.app"
 ]}})
 
 # Register Blueprints

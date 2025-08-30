@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000',
+  baseURL: process.env.NODE_ENV === "production"
+    ? "https://swavik1.onrender.com"
+    : "http://127.0.0.1:5000",
 });
 
 API.interceptors.request.use((config) => {

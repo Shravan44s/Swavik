@@ -9,8 +9,13 @@ load_dotenv()  # take environment variables from .env.
 
 app = Flask(__name__)
 
-# ✅ Explicitly allow your frontend domain
-CORS(app, resources={r"/*": {"origins": ["https://www.swavik.co.in", "https://swavik.co.in"]}})
+# ✅ Allow local dev + production domains
+CORS(app, resources={r"/*": {"origins": [
+    "http://localhost:3000",      # React local dev
+    "http://127.0.0.1:3000",      # sometimes React runs on this
+    "https://www.swavik.co.in",   # your live domain
+    "https://swavik.co.in"        # without www
+]}})
 
 # Register Blueprints
 app.register_blueprint(auth_bp)

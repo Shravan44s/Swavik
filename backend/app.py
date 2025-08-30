@@ -10,18 +10,30 @@ load_dotenv()  # take environment variables from .env.
 app = Flask(__name__)
 
 # ✅ Allow local dev + production domains
-CORS(app, resources={r"/*": {"origins": [
-    "http://localhost:3000",      # React local dev
-    "http://127.0.0.1:3000",      # sometimes React runs on this
-    "https://www.swavik.co.in",   # your live domain
-    "https://swavik.co.in",      # without www
+allowed_origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://www.swavik.co.in",
+    "https://swavik.co.in",
     "https://swavik-xi.vercel.app"
-]}})
+]
 
-# Register Blueprints
-app.register_blueprint(auth_bp)
-app.register_blueprint(user_bp)
-app.register_blueprint(course_bp)
+CORS(
+    app,
+    resources={r"/*": {"origins": allowed_origins}},
+    supports_credentials=True,
+    methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# Register Blueprints with optional URL prefix
+app.register_blueprint(auth_bp, url_prefix="/api/auth")
+app.register_blueprint(user_bp, url_prefix="/api/users")
+app.register_blueprint(course_bp, url_prefix="/api/courses")
+
+# Health check route (optional)
+@app.route("/", methods=["GET"])
+def home():
+    return {"status": "ok", "message": "Swavik API running!"}
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)

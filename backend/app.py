@@ -6,26 +6,23 @@ from routes.courses import course_bp
 from dotenv import load_dotenv
 import os
 
-# Load environment variables
-load_dotenv()
+load_dotenv()  # Load environment variables from .env
 
 app = Flask(__name__)
 
-# List all allowed frontend URLs
-allowed_origins = [
-    "http://localhost:3000",
-    "https://swavik.co.in",
-    "https://www.swavik.co.in",
-    "https://swavik1.onrender.com"
+# Allow only your frontend domain in production
+frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+CORS(app, resources={r"/*": {"origins": frontend_url}})
 
-]
+# Register Blueprints
+app.register_blueprint(auth_bp, url_prefix="/api/auth")
+app.register_blueprint(user_bp, url_prefix="/api/users")
+app.register_blueprint(course_bp, url_prefix="/api/courses")
 
-CORS(app, resources={r"/*": {"origins": allowed_origins}}, supports_credentials=True)
-
-# Register Blueprints with API prefix
-app.register_blueprint(auth_bp, url_prefix="/api")
-app.register_blueprint(user_bp, url_prefix="/api")
-app.register_blueprint(course_bp, url_prefix="/api")
+# Health check route (useful for Render)
+@app.route("/", methods=["GET"])
+def home():
+    return {"status": "ok", "message": "Swavik API running!"}
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5000)), debug=True)

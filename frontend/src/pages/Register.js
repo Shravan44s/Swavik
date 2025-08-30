@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { FiEye, FiEyeOff } from 'react-icons/fi';  // <-- Imported here
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 import API from '../services/api';
 import './Register.css';
 
@@ -16,6 +16,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // <-- New loading state
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -25,34 +26,45 @@ const Register = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phoneRegex = /^[6-9]\d{9}$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneRegex = /^[6-9]\d{9}$/;
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/; // <-- Password rule
 
-    if (!emailRegex.test(formData.email)) {
-      setError('Please enter a valid email address.');
-      setMessage('');
-      return;
-    }
+  if (!emailRegex.test(formData.email)) {
+    setError('Please enter a valid email address.');
+    setMessage('');
+    return;
+  }
 
-    if (formData.phone && !phoneRegex.test(formData.phone)) {
-      setError('Please enter a valid 10-digit Indian phone number.');
-      setMessage('');
-      return;
-    }
+  if (formData.phone && !phoneRegex.test(formData.phone)) {
+    setError('Please enter a valid 10-digit Indian phone number.');
+    setMessage('');
+    return;
+  }
 
-    try {
-      const res = await API.post('/register', formData);
-      setMessage(res.data.message);
-      setError('');
-      localStorage.setItem('token', res.data.token);
-      navigate('/dashboard');
-    } catch (error) {
-      setError(error.response?.data?.error || 'Error submitting form');
-      setMessage('');
-    }
-  };
+  if (!passwordRegex.test(formData.password)) {
+    setError('Password must be at least 6 characters long and include at least 1 letter and 1 number.');
+    setMessage('');
+    return;
+  }
+
+  setLoading(true); // start loading
+  try {
+    const res = await API.post('/register', formData);
+    setMessage(res.data.message);
+    setError('');
+    localStorage.setItem('token', res.data.token);
+    navigate('/dashboard');
+  } catch (error) {
+    setError(error.response?.data?.error || 'Error submitting form');
+    setMessage('');
+  } finally {
+    setLoading(false); // stop loading
+  }
+};
+
 
   return (
     <div className="register-container">
@@ -104,8 +116,12 @@ const Register = () => {
             {showPassword ? <FiEyeOff /> : <FiEye />}
           </span>
         </div>
-        <button type="submit">Register</button>
+
+        <button type="submit" disabled={loading}>
+          {loading ? <span className="spinner"></span> : 'Register'}
+        </button>
       </form>
+
       <p style={{ marginTop: '15px', textAlign: 'center' }}>
         Already have an account? <Link to="/login">Login here</Link>
       </p>

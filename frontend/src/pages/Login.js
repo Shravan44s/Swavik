@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { FiEye, FiEyeOff } from 'react-icons/fi';  // 👈 Eye icons
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 import API from '../services/api';
 import './Login.css';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
-  const [showPassword, setShowPassword] = useState(false);  // 👈 Toggle state
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // New state for loading
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -17,12 +18,15 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // start loading
     try {
       const res = await API.post('/login', formData);
       localStorage.setItem('token', res.data.token);
       navigate('/dashboard');
     } catch (error) {
       setError('Invalid email or password');
+    } finally {
+      setLoading(false); // stop loading
     }
   };
 
@@ -58,7 +62,13 @@ const Login = () => {
           </span>
         </div>
 
-        <button type="submit">Login</button>
+        <button type="submit" disabled={loading}>
+          {loading ? (
+            <span className="spinner"></span> // loading spinner
+          ) : (
+            'Login'
+          )}
+        </button>
       </form>
 
       <p style={{ marginTop: '15px', textAlign: 'center' }}>

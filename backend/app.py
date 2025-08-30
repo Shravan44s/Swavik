@@ -15,7 +15,9 @@ app = Flask(__name__)
 allowed_origins = [
     "http://localhost:3000",
     "https://swavik.co.in",
-    "https://www.swavik.co.in"
+    "https://www.swavik.co.in",
+    "https://swavik1.onrender.com"
+
 ]
 
 CORS(app, resources={r"/*": {"origins": allowed_origins}}, supports_credentials=True)

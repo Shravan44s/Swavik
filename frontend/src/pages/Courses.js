@@ -4,11 +4,12 @@ import './Courses.css';
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
+  const [enrolledCourses, setEnrolledCourses] = useState([]); 
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [enrolling, setEnrolling] = useState(null);
   const [selectedCourse, setSelectedCourse] = useState(null);
-  const [confirmEnrollCourse, setConfirmEnrollCourse] = useState(null); // New state
+  const [confirmEnrollCourse, setConfirmEnrollCourse] = useState(null);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -16,6 +17,14 @@ const Courses = () => {
       try {
         const res = await API.get('/courses');
         setCourses(res.data);
+
+        const token = localStorage.getItem('token');
+        if (token) {
+          const enrolledRes = await API.get('/users/enrolled', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setEnrolledCourses(enrolledRes.data.map(c => c.course_id));
+        }
       } catch (error) {
         console.error('Failed to fetch courses:', error);
         setMessage('⚠️ Failed to load courses. Please try again later.');
@@ -29,81 +38,95 @@ const Courses = () => {
   const startEnroll = (course) => {
     const token = localStorage.getItem('token');
     if (!token) {
-      alert('Please login to enroll.');
+      setMessage('⚠️ Please login to enroll.');
       return;
     }
-    setConfirmEnrollCourse(course); // Show confirmation popup
+
+    if (enrolledCourses.includes(course.course_id)) {
+      setMessage(`✅ You are already enrolled in "${course.course_name}".`);
+      return;
+    }
+
+    setConfirmEnrollCourse(course); 
   };
 
-const confirmEnroll = async () => {
-  if (!confirmEnrollCourse) return;
+  const confirmEnroll = async () => {
+    if (!confirmEnrollCourse) return;
 
-  setEnrolling(confirmEnrollCourse.course_id);
-  setConfirmEnrollCourse(null);  // close confirmation popup
+    setEnrolling(confirmEnrollCourse.course_id);
+    setConfirmEnrollCourse(null);
 
-  try {
-    const token = localStorage.getItem('token');
-    await API.post('/enroll', { course_id: confirmEnrollCourse.course_id }, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    setMessage('✅ Successfully enrolled in the course!');
-    setSelectedCourse(null);  // close course details popup
-  } catch (error) {
-    if (error.response && error.response.data.error) {
-      setMessage(`⚠️ ${error.response.data.error}`);
-    } else {
-      setMessage('⚠️ Failed to enroll. Please try again.');
+    try {
+      const token = localStorage.getItem('token');
+      await API.post('/enroll', { course_id: confirmEnrollCourse.course_id }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setMessage(`✅ Successfully enrolled in "${confirmEnrollCourse.course_name}"!`);
+      setEnrolledCourses(prev => [...prev, confirmEnrollCourse.course_id]); 
+      setSelectedCourse(null);
+    } catch (error) {
+      if (error.response && error.response.data.error) {
+        setMessage(`⚠️ ${error.response.data.error}`);
+      } else {
+        setMessage('⚠️ Failed to enroll. Please try again.');
+      }
+    } finally {
+      setEnrolling(null);
+      setSelectedCourse(null);
     }
-  } finally {
-    setEnrolling(null);
-    setSelectedCourse(null);  // closes course details popup
-
-
-  }
-};
+  };
 
   return (
     <div className="courses-container">
       <br/>
       <h2 className="section-title">Available Courses</h2>
 
+      {/* Display messages on page */}
       {message && <div className="message">{message}</div>}
 
       {loading ? (
         <p className="loading-text">Loading courses...</p>
       ) : (
         <ul className="courses-list">
-          {courses.map(course => (
-            <li key={course.course_id} className="course-card">
-              <div
-                className="course-info"
-                style={{ cursor: 'pointer' }}
-                onClick={() => setSelectedCourse(course)}
-                title="Click to see course details"
-              >
-                <h3>
-                  {course.course_name}{' '}
-                  <span className="info-icon" role="img" aria-label="info" title="Click to see details">
-                    ℹ️
-                  </span>
-                </h3>
-                <p><strong>Duration:</strong> {course.duration_weeks} week{course.duration_weeks > 1 ? 's' : ''}</p>
-<p className="course-price">
-  <strong>Price:</strong>
-  <span className="original-price"> ₹{Number(course.original_price).toFixed(2)} </span>
-  <span className="discounted-price"> ₹{Number(course.price).toFixed(2)} </span>
-</p>
+          {courses.map(course => {
+            const isEnrolled = enrolledCourses.includes(course.course_id);
 
-              </div>
-              <button
-                className="enroll-btn"
-                disabled={enrolling === course.course_id}
-                onClick={() => startEnroll(course)}
-              >
-                {enrolling === course.course_id ? 'Enrolling...' : 'Enroll'}
-              </button>
-            </li>
-          ))}
+            return (
+              <li key={course.course_id} className="course-card">
+                <div
+                  className="course-info"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelectedCourse(course)}
+                  title="Click to see course details"
+                >
+                  <h3>
+                    {course.course_name}{' '}
+                    <span className="info-icon" role="img" aria-label="info" title="Click to see details">
+                      ℹ️
+                    </span>
+                  </h3>
+                  <p><strong>Duration:</strong> {course.duration_weeks} week{course.duration_weeks > 1 ? 's' : ''}</p>
+                  <p className="course-price">
+                    <strong>Price:</strong>
+                    <span className="original-price"> ₹{Number(course.original_price).toFixed(2)} </span>
+                    <span className="discounted-price"> ₹{Number(course.price).toFixed(2)} </span>
+                  </p>
+                </div>
+
+                <button
+                  className={`enroll-btn ${isEnrolled ? 'enrolled-btn' : ''}`}
+                  disabled={enrolling === course.course_id}
+                  onClick={() => startEnroll(course)}
+                >
+                  {isEnrolled
+                    ? 'Enrolled'
+                    : enrolling === course.course_id
+                      ? 'Enrolling...'
+                      : 'Enroll'}
+                </button>
+              </li>
+            );
+          })}
         </ul>
       )}
 
@@ -127,12 +150,15 @@ const confirmEnroll = async () => {
             <div className="modal-buttons">
               <button
                 className="enroll-btn"
-                disabled={enrolling === selectedCourse.course_id}
+                disabled={enrolling === selectedCourse.course_id || enrolledCourses.includes(selectedCourse.course_id)}
                 onClick={() => startEnroll(selectedCourse)}
               >
-                {enrolling === selectedCourse.course_id ? 'Enrolling...' : 'Enroll'}
+                {enrolledCourses.includes(selectedCourse.course_id)
+                  ? 'Enrolled'
+                  : enrolling === selectedCourse.course_id
+                    ? 'Enrolling...'
+                    : 'Enroll'}
               </button>
-
               <button className="close-btn" onClick={() => setSelectedCourse(null)}>Close</button>
             </div>
           </div>

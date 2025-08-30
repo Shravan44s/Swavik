@@ -39,59 +39,61 @@ const Navbar = () => {
           <span className="navbar-title">Swavik</span>
         </Link>
 
+        {/* Right side container for navigation and user menu */}
+        <div className="navbar-right">
+          <div className="menu-icon" onClick={toggleMenu}>
+            {menuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+          </div>
 
-        <div className="menu-icon" onClick={toggleMenu}>
-          {menuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-        </div>
-
-        <ul className={menuOpen ? 'nav-menu active' : 'nav-menu'}>
-          {token && (
-            <>
-              <li className={`nav-item ${isActive('/dashboard')}`}>
-                <Link to="/dashboard" className="nav-links" onClick={closeMenus}>
-                  Dashboard
-                </Link>
-              </li>
-              <li className={`nav-item ${isActive('/courses')}`}>
-                <Link to="/courses" className="nav-links" onClick={closeMenus}>
-                  Courses
-                </Link>
-              </li>
-              <li className={`nav-item ${isActive('/profile')}`}>
-                <Link to="/profile" className="nav-links" onClick={closeMenus}>
-                  Profile
-                </Link>
-              </li>
-            </>
-          )}
-
-          <li className={`nav-item ${isActive('/contact')}`}>
-            <Link to="/contact" className="nav-links" onClick={closeMenus}>
-              Contact Us
-            </Link>
-          </li>
-        </ul>
-
-        {token ? (
-          <div className="user-menu-container">
-            <FaUserCircle size={28} className="user-icon" onClick={toggleUserMenu} />
-            {userMenuOpen && (
-              <div className="user-dropdown">
-                <Link to="/profile" className="dropdown-link" onClick={() => { closeMenus(); setUserMenuOpen(false); }}>
-                  My Profile
-                </Link>
-                <button className="dropdown-link logout-btn" onClick={handleLogout}>
-                  Logout
-                </button>
-              </div>
+          <ul className={menuOpen ? 'nav-menu active' : 'nav-menu'}>
+            {token && (
+              <>
+                <li className={`nav-item ${isActive('/dashboard')}`}>
+                  <Link to="/dashboard" className="nav-links" onClick={closeMenus}>
+                    Dashboard
+                  </Link>
+                </li>
+                <li className={`nav-item ${isActive('/courses')}`}>
+                  <Link to="/courses" className="nav-links" onClick={closeMenus}>
+                    Courses
+                  </Link>
+                </li>
+                <li className={`nav-item ${isActive('/profile')}`}>
+                  <Link to="/profile" className="nav-links" onClick={closeMenus}>
+                    Profile
+                  </Link>
+                </li>
+              </>
             )}
-          </div>
-        ) : (
-          <div className="auth-links">
-            <Link to="/login" className="btn auth-btn" onClick={closeMenus}>Login</Link>
-            <Link to="/register" className="btn auth-btn register" onClick={closeMenus}>Register</Link>
-          </div>
-        )}
+
+            <li className={`nav-item ${isActive('/contact')}`}>
+              <Link to="/contact" className="nav-links" onClick={closeMenus}>
+                Contact Us
+              </Link>
+            </li>
+          </ul>
+
+          {token ? (
+            <div className="user-menu-container">
+              <FaUserCircle size={28} className="user-icon" onClick={toggleUserMenu} />
+              {userMenuOpen && (
+                <div className="user-dropdown">
+                  <Link to="/profile" className="dropdown-link" onClick={() => { closeMenus(); setUserMenuOpen(false); }}>
+                    My Profile
+                  </Link>
+                  <button className="dropdown-link logout-btn" onClick={handleLogout}>
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="auth-links">
+              <Link to="/login" className="btn auth-btn" onClick={closeMenus}>Login</Link>
+              <Link to="/register" className="btn auth-btn register" onClick={closeMenus}>Register</Link>
+            </div>
+          )}
+        </div>
       </div>
     </nav>
   );

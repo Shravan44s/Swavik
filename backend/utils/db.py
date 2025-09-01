@@ -1,9 +1,14 @@
 import mysql.connector
+from dotenv import load_dotenv
+import os
+
+# Load environment variables
+load_dotenv()
 
 def get_connection():
     return mysql.connector.connect(
-        host='swavik.crs88o8ew1b9.ap-south-1.rds.amazonaws.com',
-        user='root',
-        password='11082002',
-        database='swavik_db'
+        host=os.environ.get('DB_HOST'),
+        user=os.environ.get('DB_USER'),
+        password=os.environ.get('DB_PASS'),
+        database=os.environ.get('DB_NAME')
     )

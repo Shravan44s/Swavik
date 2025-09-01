@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import API from '../services/api';
 import './Dashboard.css';
+import { Link } from 'react-router-dom';  
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -62,7 +63,14 @@ const Dashboard = () => {
         <Widget title="Active" value={courseCount - completedCourses} color="active" />
       </div>
 
+      <div className="enrolled-link">
+        <Link to="/profile" className="enrolled-btn">
+          📚 View Your Enrolled Courses
+        </Link>
+      </div>
+
       <Tips />
+
 
       <h3 className="progress-title">Course Progress</h3>
       {courses.length === 0 ? (
@@ -74,6 +82,24 @@ const Dashboard = () => {
           ))}
         </ul>
       )}
+
+      {/* Quiz Session Section */}
+      <div className="quiz-session">
+        <h3>📝 Quiz</h3>
+        <p>Quizzes will be available soon to test your skills!</p>
+        <button className="quiz-btn" disabled>
+          🚧 Quiz Coming Soon
+        </button>
+      </div>
+       {/* Coming Soon Poster Section */}
+      <div className="coming-soon">
+        <h3>🚀 Courses Coming Soon</h3>
+        <img
+          src="comingsoon.jpg"
+          alt="Coming Soon Poster"
+          className="coming-soon-poster"
+        />
+      </div>
     </div>
   );
 };
@@ -144,28 +170,27 @@ const CourseProgress = ({ course }) => {
       )}
 
       {daysLeft === 0 && (
-  course.certificate_url ? (
-    <a
-      href={course.certificate_url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="certificate-btn"
-      aria-label={`Download certificate for ${course.course_name}`}
-      download
-    >
-      🎓 Download Certificate
-    </a>
-  ) : (
-    <button
-      className="certificate-btn disabled"
-      onClick={() => alert('🎓 Your certificate will be delivered soon!')}
-      aria-disabled="true"
-    >
-      🎓 Certificate Coming Soon
-    </button>
-  )
-)}
-
+        course.certificate_url ? (
+          <a
+            href={course.certificate_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="certificate-btn"
+            aria-label={`Download certificate for ${course.course_name}`}
+            download
+          >
+            🎓 Download Certificate
+          </a>
+        ) : (
+          <button
+            className="certificate-btn disabled"
+            onClick={() => alert('🎓 Your certificate will be delivered soon!')}
+            aria-disabled="true"
+          >
+            🎓 Certificate Coming Soon
+          </button>
+        )
+      )}
     </li>
   );
 };

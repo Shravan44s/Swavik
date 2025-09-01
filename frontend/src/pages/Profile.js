@@ -235,6 +235,21 @@ const Profile = () => {
                     >
                       📄 Download Notes
                     </button>
+{/* Quiz Button */}
+{paymentCompleted && (
+  <button
+    className={`quiz-btn ${!course.quiz_url?.trim() ? 'disabled' : ''}`}
+    onClick={() => {
+      if (course.quiz_url?.trim()) {
+        window.open(course.quiz_url, '_blank');
+      }
+    }}
+    disabled={!course.quiz_url?.trim()}
+    title={course.quiz_url?.trim() ? 'Start Quiz' : 'Quiz not available yet'}
+  >
+    📝 Take Quiz
+  </button>
+)}
 
                     {!paymentCompleted && (
                       <button className="payment-btn" onClick={handlePaymentClick}>

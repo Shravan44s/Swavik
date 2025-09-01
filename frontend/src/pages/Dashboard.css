@@ -351,3 +351,124 @@
   color: #0057d9;
   font-weight: 700;
 }
+/* ✅ Enrolled Courses Link */
+.enrolled-link {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0 30px;
+}
+
+.enrolled-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, #1e3c72, #2a5298); /* Blue gradient */
+  color: #fff;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  text-decoration: none;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.enrolled-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  background: linear-gradient(135deg, #2a5298, #1e3c72);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+}
+.coming-soon {
+  margin: 3rem 0;
+  text-align: center;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  color: rgb(16, 7, 91);
+}
+
+.coming-soon h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+}
+
+.coming-soon-poster {
+  max-width: 40%;
+  border-radius: 16px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.coming-soon-poster:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+}
+
+/* Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.quiz-session {
+  margin: 3rem 0;
+  padding: 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, #f0f9ff, #dbeafe);
+  border: 2px dashed #1e3a8a;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  animation: fadeInUp 1.2s ease-in-out;
+}
+
+.quiz-session h3 {
+  font-size: 1.7rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #1e3a8a;
+  text-shadow: 1px 1px 4px rgba(30,58,138,0.2);
+}
+
+.quiz-session p {
+  font-size: 1rem;
+  color: #374151;
+  margin-bottom: 1.5rem;
+}
+
+.quiz-btn {
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: not-allowed;
+  opacity: 0.7;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.quiz-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Reuse fade-in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

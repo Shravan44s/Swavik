@@ -26,15 +26,17 @@ def profile():
     if not user:
         conn.close()
         return jsonify({'error': 'User not found'}), 404
-
+    
     cursor.execute("""
-        SELECT c.course_id, c.course_name, c.duration_weeks, c.price, c.original_price, c.notes_url,
+        SELECT c.course_id, c.course_name, c.duration_weeks, c.price, c.original_price, 
+               c.notes_url, c.quiz_url,
                uc.registration_date, uc.completion_date, uc.certificate_url,
                uc.payment_status
         FROM courses c
         JOIN user_courses uc ON c.course_id = uc.course_id
         WHERE uc.user_id = %s
     """, (user_id,))
+
     courses = cursor.fetchall()
     conn.close()
 

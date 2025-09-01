@@ -423,3 +423,36 @@
   color: #128c7e;
   text-decoration: underline;
 }
+
+
+.quiz-btn {
+  margin-left: 12px;
+  display: inline-block;
+  margin-top: 14px;
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #0354cf, #2989ff); /* same as notes */
+  color: white;
+  font-weight: 700;
+  border: none;
+  border-radius: 30px; /* rounded pill */
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.35s ease, box-shadow 0.35s ease;
+  user-select: none;
+}
+
+.quiz-btn:hover:not(.disabled) {
+  background: linear-gradient(135deg, #2989ff, #0057d9);
+  box-shadow:
+    0 8px 25px rgba(41, 137, 255, 0.85),
+    inset 0 -4px 10px rgba(255, 255, 255, 0.55);
+  transform: scale(1.05);
+}
+
+.quiz-btn.disabled {
+  background: #d1d5db;
+  color: #6b7280;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}

@@ -213,3 +213,16 @@ body {
     font-size: 1rem;
   }
 }
+
+.contact-reachout{
+  background: #0f3675;
+  color: #e0f2fe;
+  padding: 4rem 4rem;
+  max-width: 1000px;
+  margin: 4rem auto;
+  border-radius: 30px;
+  box-shadow: 0 12px 40px rgba(59, 130, 246, 0.3);
+  text-align: center;
+  z-index: 2;
+  position: relative;
+}

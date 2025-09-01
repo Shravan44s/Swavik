@@ -82,3 +82,19 @@ def submit_project():
     conn.close()
 
     return jsonify({'message': 'Project submitted successfully', 'project_url': project_url})
+
+@user_bp.route('/payment/qr', methods=['GET'])
+def get_payment_qr():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({'error': 'Missing token'}), 401
+
+    token = auth_header.split(" ")[1]
+    user_id = verify_token(token)
+    if not user_id:
+        return jsonify({'error': 'Invalid or expired token'}), 403
+
+    # ✅ Direct QR image link (replace with your own Drive ID if needed)
+    qr_url = "https://github.com/Shravan44s/QRCODE/blob/main/GooglePay_QR.png?raw=true"
+
+    return jsonify({'qr_url': qr_url})

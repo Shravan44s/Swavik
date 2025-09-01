@@ -409,3 +409,17 @@
   box-shadow:
     0 4px 15px rgba(41, 137, 255, 0.5);
 }
+.whatsapp-link {
+  display: inline-block;
+  margin-top: 10px;
+  font-weight: bold;
+  color: #25d366;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.whatsapp-link:hover {
+  color: #128c7e;
+  text-decoration: underline;
+}

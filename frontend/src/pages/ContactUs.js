@@ -32,9 +32,9 @@ const ContactUs = () => {
         <h3>Reach Out To Us</h3>
         <ul className="contact-list">
           <li><FaEnvelope /> swavikintern@gmail.com</li>
-          <li><FaPhone /> +91 9980200591</li>
+          <li><FaPhone /> +91 9590077817</li>
           <li><FaMapMarkerAlt /> Bengaluru, Karnataka, India</li>
-          <li><FaGlobe /> www.swavik.in</li>
+          <li><FaGlobe /> www.swavik.co.in</li>
         </ul>
 
         <div className="social-icons">

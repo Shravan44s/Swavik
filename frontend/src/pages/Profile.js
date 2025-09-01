@@ -260,7 +260,15 @@ const Profile = () => {
               &times;
             </button>
             <h4>Scan QR Code to Pay</h4>
-            <h4>Send Payment to WhatsApp: 9980200591</h4>
+           <a
+  href="https://wa.me/919590077817?text=Hello%2C%20I%20have%20completed%20the%20payment.%20Here%20is%20the%20screenshot."
+  target="_blank"
+  rel="noopener noreferrer"
+  className="whatsapp-link"
+>
+  📲 Send Payment Screenshot via WhatsApp
+</a>
+
             {qrUrl ? (
               <img src={qrUrl} alt="Payment QR Code" className="qr-code-img" />
             ) : (

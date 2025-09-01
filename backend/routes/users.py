@@ -28,14 +28,15 @@ def profile():
         return jsonify({'error': 'User not found'}), 404
     
     cursor.execute("""
-        SELECT c.course_id, c.course_name, c.duration_weeks, c.price, c.original_price, 
-               c.notes_url, c.quiz_url,
-               uc.registration_date, uc.completion_date, uc.certificate_url,
-               uc.payment_status
-        FROM courses c
-        JOIN user_courses uc ON c.course_id = uc.course_id
-        WHERE uc.user_id = %s
-    """, (user_id,))
+    SELECT c.course_id, c.course_name, c.duration_weeks, c.price, c.original_price, 
+           c.notes_url, c.quiz_url,
+           uc.registration_date, uc.completion_date, uc.certificate_url,
+           uc.payment_status, uc.project_url   
+    FROM courses c
+    JOIN user_courses uc ON c.course_id = uc.course_id
+    WHERE uc.user_id = %s
+""", (user_id,))
+
 
     courses = cursor.fetchall()
     conn.close()
@@ -50,9 +51,8 @@ def profile():
     })
 
 
-
-@user_bp.route('/profile', methods=['PUT'])
-def update_profile():
+@user_bp.route('/submit_project', methods=['PUT'])
+def submit_project():
     auth_header = request.headers.get('Authorization')
     if not auth_header:
         return jsonify({'error': 'Missing token'}), 401
@@ -63,38 +63,22 @@ def update_profile():
         return jsonify({'error': 'Invalid or expired token'}), 403
 
     data = request.json
-    name = data.get('name')
-    college_name = data.get('college')
-    resume_url = data.get('resume_url')
+    course_id = data.get('course_id')
+    project_url = data.get('project_url')
 
-    if not name or not college_name:
-        return jsonify({'error': 'Name and college are required'}), 400
+    if not course_id or not project_url:
+        return jsonify({'error': 'Course ID and project URL required'}), 400
 
     conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
-        UPDATE users SET name = %s, college_name = %s, resume_url = %s WHERE user_id = %s
-    """, (name, college_name, resume_url, user_id))
+        UPDATE user_courses
+        SET project_url = %s
+        WHERE user_id = %s AND course_id = %s
+    """, (project_url, user_id, course_id))
 
     conn.commit()
     conn.close()
 
-    return jsonify({'message': 'Profile updated successfully'})
-
-
-@user_bp.route('/payment/qr', methods=['GET'])
-def get_payment_qr():
-    auth_header = request.headers.get('Authorization')
-    if not auth_header:
-        return jsonify({'error': 'Missing token'}), 401
-
-    token = auth_header.split(" ")[1]
-    user_id = verify_token(token)
-    if not user_id:
-        return jsonify({'error': 'Invalid or expired token'}), 403
-
-    # ✅ Direct QR image link (replace with your own Drive ID if needed)
-    qr_url = "https://github.com/Shravan44s/QRCODE/blob/main/GooglePay_QR.png?raw=true"
-
-    return jsonify({'qr_url': qr_url})
+    return jsonify({'message': 'Project submitted successfully', 'project_url': project_url})

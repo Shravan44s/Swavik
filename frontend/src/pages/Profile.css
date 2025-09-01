@@ -456,3 +456,178 @@
   box-shadow: none;
   transform: none;
 }
+
+/* --- Shared pill button look (matches .download-notes-btn) --- */
+.btn-pill {
+padding: 10px 22px;
+  border-radius: 30px;
+  font-weight: 700;
+  background: transparent;
+  color: #0b63d1;
+  border: 2px solid #0b63d1;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.btn-pill:hover {
+ background: #0b63d1;
+  color: #fff;
+  box-shadow: 0 8px 22px rgba(11, 99, 209, 0.3);
+}
+
+.btn-pill:active {
+  transform: translateY(1px);
+}
+
+/* keep existing spacing of notes button */
+.download-notes-btn { 
+  margin-right: 12px;
+}
+
+/* Make quiz look identical to notes button (size + color) */
+.quiz-btn {
+  composes: btn-pill;
+  margin-right: 12px;
+}
+
+/* Disabled quiz look */
+.quiz-btn.disabled,
+.quiz-btn:disabled {
+  background: #cbd5e1;
+  color: #475569;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* --- Project actions --- */
+.project-section {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+/* Submit Project button = same as notes/quiz (blue pill) */
+.project-btn {
+  margin-right: 12px;
+    padding: 10px 22px;
+  border-radius: 30px;
+  font-weight: 700;
+  background: transparent;
+  color: #0b63d1;
+  border: 2px solid #0b63d1;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.project-btn:hover {
+  background: #0b63d1;
+  color: #fff;
+  box-shadow: 0 8px 22px rgba(11, 99, 209, 0.3);
+}
+
+/* View + Edit row when a URL exists */
+.project-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* View Project link styled like a subtle pill link */
+.project-display a {
+  display: inline-block;
+  padding: 10px 22px;
+  border-radius: 30px;
+  font-weight: 700;
+  text-decoration: none;
+  color: #0b63d1;
+  background: #e8f1ff;
+  border: 1px solid rgba(11, 99, 209, 0.25);
+  transition: box-shadow 0.3s ease, transform 0.2s ease, background 0.3s ease;
+}
+
+.project-display a:hover {
+  background: #dbeaff;
+  box-shadow: 0 8px 22px rgba(11, 99, 209, 0.15);
+}
+
+/* Edit Project button: outline style, still blue and same size */
+.edit-btn {
+  padding: 10px 22px;
+  border-radius: 30px;
+  font-weight: 700;
+  background: transparent;
+  color: #0b63d1;
+  border: 2px solid #0b63d1;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.edit-btn:hover {
+  background: #0b63d1;
+  color: #fff;
+  box-shadow: 0 8px 22px rgba(11, 99, 209, 0.3);
+}
+
+.edit-btn:active {
+  transform: translateY(1px);
+}
+
+/* Responsive tweaks for narrow screens */
+@media (max-width: 520px) {
+  .btn-pill,
+  .project-display a,
+  .edit-btn {
+    padding: 9px 18px;
+    font-weight: 700;
+  }
+
+  .project-section {
+    gap: 8px;
+  }
+}
+
+
+/* --- Popup Input Field --- */
+.popup-input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 2px solid rgba(11, 99, 209, 0.35);
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1e2f5a;
+  background: #f9fbff;
+  outline: none;
+  margin-bottom: 20px;
+  transition: border 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+/* Focus effect with glowing border */
+.popup-input:focus {
+  border-color: #0b63d1;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(11, 99, 209, 0.25);
+}
+
+/* Placeholder style */
+.popup-input::placeholder {
+  color: #7a8ca8;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+/* Disabled state */
+.popup-input:disabled {
+  background: #e6eaf0;
+  border-color: rgba(11, 99, 209, 0.2);
+  color: #8a94a6;
+  cursor: not-allowed;
+}
+
+/* Slight scale-up on focus */
+.popup-input:focus {
+  transform: scale(1.01);
+}
+

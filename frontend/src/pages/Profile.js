@@ -27,6 +27,11 @@ const Profile = () => {
   const [paymentMsg, setPaymentMsg] = useState('');
   const [paymentMsgForCourse, setPaymentMsgForCourse] = useState(null);
 
+  // 🔹 Project modal states
+  const [showProjectModal, setShowProjectModal] = useState(false);
+  const [projectCourseId, setProjectCourseId] = useState(null);
+  const [projectUrl, setProjectUrl] = useState('');
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -68,6 +73,36 @@ const Profile = () => {
     setEditForm({ ...editForm, [e.target.name]: e.target.value });
   };
 
+  const submitProject = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await API.put(
+        '/submit_project',
+        {
+          course_id: projectCourseId,
+          project_url: projectUrl
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+
+      // Update course list with new project_url
+      setCourses((prevCourses) =>
+        prevCourses.map((c) =>
+          c.course_id === projectCourseId ? { ...c, project_url: res.data.project_url } : c
+        )
+      );
+
+      setShowProjectModal(false);
+      setProjectCourseId(null);
+      setProjectUrl('');
+    } catch (err) {
+      console.error(err);
+      alert('❌ Failed to submit project. Try again.');
+    }
+  };
+
   const handleSave = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -75,7 +110,7 @@ const Profile = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      setUser(prev => ({ ...prev, ...editForm }));
+      setUser((prev) => ({ ...prev, ...editForm }));
       setIsEditing(false);
       setMessage(res.data.message);
     } catch (err) {
@@ -123,6 +158,7 @@ const Profile = () => {
       variants={pageVariants}
       transition={pageTransition}
     >
+      {/* Profile Card */}
       <div className="profile-card">
         <div className="profile-header">
           <div className="avatar">{user.name[0]}</div>
@@ -186,16 +222,20 @@ const Profile = () => {
         {message && <div className="success-box">{message}</div>}
       </div>
 
+      {/* Courses Section */}
       <div className="courses-section">
         <h3>Enrolled Courses</h3>
         {courses.length === 0 ? (
           <p className="no-courses">You are not enrolled in any courses yet.</p>
         ) : (
           <ul className="course-list">
-            {courses.map(course => {
+            {courses.map((course) => {
               const daysLeft = calculateDaysLeft(course.completion_date);
               const totalDays = course.duration_weeks * 7;
-              const progress = Math.min(100, Math.round(((totalDays - daysLeft) / totalDays) * 100));
+              const progress = Math.min(
+                100,
+                Math.round(((totalDays - daysLeft) / totalDays) * 100)
+              );
               const paymentCompleted = course.payment_status === 'yes';
 
               const isMsgForThisCourse = paymentMsgForCourse === course.course_id;
@@ -219,6 +259,7 @@ const Profile = () => {
                   <div className="progress-label">{progress}% complete</div>
 
                   <div className="course-actions">
+                    {/* Notes */}
                     <button
                       className="download-notes-btn"
                       onClick={() => {
@@ -227,7 +268,9 @@ const Profile = () => {
                           setPaymentMsgForCourse(null);
                           window.open(course.notes_url, '_blank');
                         } else {
-                          setPaymentMsg('Please complete the payment, or if you have already done so, kindly wait for the payment to be processed for the notes.');
+                          setPaymentMsg(
+                            'Please complete the payment, or if you have already done so, kindly wait for the payment to be processed for the notes.'
+                          );
                           setPaymentMsgForCourse(course.course_id);
                         }
                       }}
@@ -235,22 +278,62 @@ const Profile = () => {
                     >
                       📄 Download Notes
                     </button>
-{/* Quiz Button */}
-{paymentCompleted && (
-  <button
-    className={`quiz-btn ${!course.quiz_url?.trim() ? 'disabled' : ''}`}
-    onClick={() => {
-      if (course.quiz_url?.trim()) {
-        window.open(course.quiz_url, '_blank');
-      }
-    }}
-    disabled={!course.quiz_url?.trim()}
-    title={course.quiz_url?.trim() ? 'Start Quiz' : 'Quiz not available yet'}
-  >
-    📝 Take Quiz
-  </button>
-)}
 
+                    {/* Project */}
+                    {paymentCompleted && (
+                      <div className="project-section">
+                        {course.project_url ? (
+                          <div className="project-display">
+                            <a
+                              href={course.project_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              🚀 View Project
+                            </a>
+                            <button
+                              className="edit-btn"
+                              onClick={() => {
+                                setProjectCourseId(course.course_id);
+                                setProjectUrl(course.project_url);
+                                setShowProjectModal(true);
+                              }}
+                            >
+                              ✏️ Edit Project
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            className="project-btn"
+                            onClick={() => {
+                              setProjectCourseId(course.course_id);
+                              setProjectUrl('');
+                              setShowProjectModal(true);
+                            }}
+                          >
+                            🚀 Submit Project
+                          </button>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Quiz */}
+                    {paymentCompleted && (
+                      <button
+                        className={`quiz-btn ${!course.quiz_url?.trim() ? 'disabled' : ''}`}
+                        onClick={() => {
+                          if (course.quiz_url?.trim()) {
+                            window.open(course.quiz_url, '_blank');
+                          }
+                        }}
+                        disabled={!course.quiz_url?.trim()}
+                        title={course.quiz_url?.trim() ? 'Start Quiz' : 'Quiz not available yet'}
+                      >
+                        📝 Take Quiz
+                      </button>
+                    )}
+
+                    {/* Payment */}
                     {!paymentCompleted && (
                       <button className="payment-btn" onClick={handlePaymentClick}>
                         💳 Pay Now
@@ -268,27 +351,65 @@ const Profile = () => {
         )}
       </div>
 
+      {/* Payment QR Modal */}
       {showQR && (
-        <div className="modal-overlay" onClick={closeModal} role="dialog" aria-modal="true" tabIndex={-1}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
+        <div
+          className="modal-overlay"
+          onClick={closeModal}
+          role="dialog"
+          aria-modal="true"
+          tabIndex={-1}
+        >
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <button className="modal-close" onClick={closeModal} aria-label="Close QR modal">
               &times;
             </button>
             <h4>Scan QR Code to Pay</h4>
-           <a
-  href="https://wa.me/919590077817?text=Hello%2C%20I%20have%20completed%20the%20payment.%20Here%20is%20the%20screenshot."
-  target="_blank"
-  rel="noopener noreferrer"
-  className="whatsapp-link"
->
-  📲 Send Payment Screenshot via WhatsApp
-</a>
+            <a
+              href="https://wa.me/919590077817?text=Hello%2C%20I%20have%20completed%20the%20payment.%20Here%20is%20the%20screenshot."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="whatsapp-link"
+            >
+              📲 Send Payment Screenshot via WhatsApp
+            </a>
 
             {qrUrl ? (
               <img src={qrUrl} alt="Payment QR Code" className="qr-code-img" />
             ) : (
               <p>Loading QR code...</p>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Project Modal */}
+      {showProjectModal && (
+        <div className="modal-overlay" onClick={() => setShowProjectModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="modal-close"
+              onClick={() => setShowProjectModal(false)}
+              aria-label="Close Project modal"
+            >
+              &times;
+            </button>
+            <h4>{projectUrl ? 'Edit Project' : 'Submit Project'}</h4>
+            <input
+              type="url"
+              className="popup-input"
+              placeholder="Enter your project URL (GitHub/Drive)"
+              value={projectUrl}
+              onChange={(e) => setProjectUrl(e.target.value)}
+            />
+            <div className="popup-actions">
+              <button className="btn-pill" onClick={submitProject}>
+                Save
+              </button>
+              <button className="edit-btn" onClick={() => setShowProjectModal(false)}>
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}

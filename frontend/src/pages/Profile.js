@@ -102,6 +102,14 @@ const Profile = () => {
       alert('❌ Failed to submit project. Try again.');
     }
   };
+const isValidUrl = (url) => {
+  try {
+    new URL(url); // will throw if invalid
+    return true;
+  } catch {
+    return false;
+  }
+};
 
   const handleSave = async () => {
     try {
@@ -279,43 +287,60 @@ const Profile = () => {
                       📄 Download Notes
                     </button>
 
-                    {/* Project */}
-                    {paymentCompleted && (
-                      <div className="project-section">
-                        {course.project_url ? (
-                          <div className="project-display">
-                            <a
-                              href={course.project_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              🚀 View Project
-                            </a>
-                            <button
-                              className="edit-btn"
-                              onClick={() => {
-                                setProjectCourseId(course.course_id);
-                                setProjectUrl(course.project_url);
-                                setShowProjectModal(true);
-                              }}
-                            >
-                              ✏️ Edit Project
-                            </button>
-                          </div>
-                        ) : (
-                          <button
-                            className="project-btn"
-                            onClick={() => {
-                              setProjectCourseId(course.course_id);
-                              setProjectUrl('');
-                              setShowProjectModal(true);
-                            }}
-                          >
-                            🚀 Submit Project
-                          </button>
-                        )}
-                      </div>
-                    )}
+                   {/* Project */}
+{paymentCompleted && (
+  <div className="project-section">
+    {course.project_url ? (
+      isValidUrl(course.project_url) ? (
+        <div className="project-display">
+          <a
+            href={course.project_url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            🚀 View Project
+          </a>
+          <button
+            className="edit-btn"
+            onClick={() => {
+              setProjectCourseId(course.course_id);
+              setProjectUrl(course.project_url);
+              setShowProjectModal(true);
+            }}
+          >
+            ✏️ Edit Project
+          </button>
+        </div>
+      ) : (
+        <div className="project-display">
+          <span className="invalid-url">⚠️ Invalid Project URL</span>
+          <button
+            className="edit-btn"
+            onClick={() => {
+              setProjectCourseId(course.course_id);
+              setProjectUrl(course.project_url);
+              setShowProjectModal(true);
+            }}
+          >
+            ✏️ Edit Project
+          </button>
+        </div>
+      )
+    ) : (
+      <button
+        className="project-btn"
+        onClick={() => {
+          setProjectCourseId(course.course_id);
+          setProjectUrl('');
+          setShowProjectModal(true);
+        }}
+      >
+        🚀 Submit Project
+      </button>
+    )}
+  </div>
+)}
+
 
                     {/* Quiz */}
                     {paymentCompleted && (

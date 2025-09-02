@@ -98,3 +98,36 @@ def get_payment_qr():
     qr_url = "https://github.com/Shravan44s/QRCODE/blob/main/GooglePay_QR.png?raw=true"
 
     return jsonify({'qr_url': qr_url})
+
+@user_bp.route('/profile', methods=['PUT'])
+def update_profile():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({'error': 'Missing token'}), 401
+
+    token = auth_header.split(" ")[1]
+    user_id = verify_token(token)
+    if not user_id:
+        return jsonify({'error': 'Invalid or expired token'}), 403
+
+    data = request.json
+    name = data.get('name')
+    college = data.get('college')
+    resume_url = data.get('resume_url')
+
+    if not name or not college:
+        return jsonify({'error': 'Name and college are required'}), 400
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE users
+        SET name = %s, college_name = %s, resume_url = %s
+        WHERE user_id = %s
+    """, (name, college, resume_url, user_id))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({'message': 'Profile updated successfully'})

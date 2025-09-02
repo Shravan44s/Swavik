@@ -180,6 +180,34 @@ const Courses = () => {
           </div>
         </div>
       )}
+           <div className="courses-carousel">
+  <h3>🎡 Explore Our Courses</h3>
+  <div className="carousel-track">
+    {/* Duplicate cards for seamless infinite effect */}
+    <div className="carousel-card">
+      <img src="/web.png" alt="Course 1" className="carousel-image" />
+    </div>
+    <div className="carousel-card">
+      <img src="/python.png" alt="Course 2" className="carousel-image" />
+    </div>
+    <div className="carousel-card">
+      <img src="/AIML.png" alt="Course 3" className="carousel-image" />
+    </div>
+
+    {/* Duplicate again to make infinite loop */}
+    <div className="carousel-card">
+      <img src="/web.png" alt="Course 1" className="carousel-image" />
+    </div>
+    <div className="carousel-card">
+      <img src="/python.png" alt="Course 2" className="carousel-image" />
+    </div>
+    <div className="carousel-card">
+      <img src="/AIML.png" alt="Course 3" className="carousel-image" />
+    </div>
+  </div>
+</div>
+
+
 
       {/* Course Structure Section */}
       <div className="structure-container">

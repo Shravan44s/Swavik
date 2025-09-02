@@ -91,6 +91,7 @@ const Dashboard = () => {
           🚧 Quiz Coming Soon
         </button>
       </div>
+
        {/* Coming Soon Poster Section */}
       <div className="coming-soon">
         <h3>🚀 Courses Coming Soon</h3>
@@ -99,6 +100,15 @@ const Dashboard = () => {
           alt="Coming Soon Poster"
           className="coming-soon-poster"
         />
+      </div>
+
+       {/* Certification Section */}
+      <div className="certification-section">
+        <h3>Certified by</h3>
+        <div className="certification-logos">
+          <img src="/msme-logo.png" alt="MSME Certified" className="cert-logo" />
+          <img src="/iso.png" alt="ISO Certified" className="cert-logo" />
+        </div>
       </div>
     </div>
   );

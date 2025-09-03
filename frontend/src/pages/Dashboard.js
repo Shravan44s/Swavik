@@ -57,19 +57,13 @@ const Dashboard = () => {
         </div>
       )}
 
-      <div className="widget-container">
-        <Widget title="Total Courses" value={courseCount} color="total" />
-        <Widget title="Completed" value={completedCourses} color="completed" />
-        <Widget title="Active" value={courseCount - completedCourses} color="active" />
-      </div>
+      
 
       <div className="enrolled-link">
         <Link to="/profile" className="enrolled-btn">
           📚 View Your Enrolled Courses
         </Link>
       </div>
-
-      <Tips />
 
 
       <h3 className="progress-title">Course Progress</h3>
@@ -82,7 +76,12 @@ const Dashboard = () => {
           ))}
         </ul>
       )}
-
+      <div className="widget-container">
+        <Widget title="Total Courses" value={courseCount} color="total" />
+        <Widget title="Completed" value={completedCourses} color="completed" />
+        <Widget title="Active" value={courseCount - completedCourses} color="active" />
+      </div>
+      <Tips />
       {/* Quiz Session Section */}
       <div className="quiz-session">
         <h3>📝 Quiz</h3>

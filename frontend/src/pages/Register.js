@@ -30,7 +30,7 @@ const Register = () => {
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^[6-9]\d{9}$/;
-  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/; // <-- Password rule
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
 
   if (!emailRegex.test(formData.email)) {
     setError('Please enter a valid email address.');

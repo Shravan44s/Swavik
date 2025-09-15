@@ -16,7 +16,7 @@ CORS(app, resources={r"/*": {"origins": [
     "https://www.swavik.co.in",   # your live domain
     "https://swavik.co.in",      # without www
     "https://swavik-xi.vercel.app",
-    "http://43.204.28.84:5000"
+    "https://43.204.28.84:5000"
 ]}})
 
 # Register Blueprints

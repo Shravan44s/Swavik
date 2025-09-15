@@ -6,21 +6,17 @@ auth_bp = Blueprint('auth', __name__)
 
 
 
-@auth_bp.route('/login', methods=['POST'])
+@auth_bp.route("/login", methods=["POST"])
 def login():
     data = request.json
-    conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
-    query = "SELECT * FROM users WHERE email = %s AND password_hash = %s"
-    cursor.execute(query, (data['email'], data['password']))
-    user = cursor.fetchone()
-    conn.close()
+    email = data.get("email")
+    password = data.get("password")
 
-    if user:
-        token = generate_token(user['user_id'])
-        return jsonify({'token': token, 'user': user})
+    # Dummy check for now
+    if email == "test@swavik.com" and password == "123":
+        return jsonify({"message": "Login successful", "token": "abc123"}), 200
     else:
-        return jsonify({'error': 'Invalid credentials'}), 401
+        return jsonify({"error": "Invalid credentials"}), 401
     
 
 @auth_bp.route('/register', methods=['POST'])

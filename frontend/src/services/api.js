@@ -2,8 +2,8 @@ import axios from 'axios';
 
 const API = axios.create({
   baseURL: process.env.NODE_ENV === "production"
-    ? "https://www.swavik.co.in"
-    : "http://127.0.0.1:5000",
+    ? "https://www.swavik.co.in/api"
+    : "http://127.0.0.1:5000/api",
 });
 
 API.interceptors.request.use((config) => {

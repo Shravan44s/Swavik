@@ -52,7 +52,7 @@ const Register = () => {
 
   setLoading(true); // start loading
   try {
-    const res = await API.post('/register', formData);
+    const res = await API.post('/api/register', formData);
     setMessage(res.data.message);
     setError('');
     localStorage.setItem('token', res.data.token);

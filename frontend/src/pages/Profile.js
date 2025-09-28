@@ -41,7 +41,7 @@ const Profile = () => {
           return;
         }
 
-        const res = await API.get('/profile', {
+        const res = await API.get('/api/profile', {
           headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -114,7 +114,7 @@ const isValidUrl = (url) => {
   const handleSave = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await API.put('/profile', editForm, {
+      const res = await API.put('/api/profile', editForm, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -138,7 +138,7 @@ const isValidUrl = (url) => {
   const handlePaymentClick = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await API.get('/payment/qr', {
+      const res = await API.get('/api/payment/qr', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setQrUrl(res.data.qr_url);

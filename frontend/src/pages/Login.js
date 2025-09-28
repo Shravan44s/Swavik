@@ -20,7 +20,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true); // start loading
     try {
-      const res = await API.post('/api/login', formData);
+      const res = await API.post('/login', formData);
       localStorage.setItem('token', res.data.token);
       navigate('/dashboard');
     } catch (error) {

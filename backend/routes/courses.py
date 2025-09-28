@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 course_bp = Blueprint('courses', __name__)
 
 # Get all courses
-@course_bp.route('/courses', methods=['GET'])
+@course_bp.route('/api/courses', methods=['GET'])
 def get_courses():
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
@@ -16,7 +16,7 @@ def get_courses():
     return jsonify(courses)
 
 # Enroll user in a course
-@course_bp.route('/enroll', methods=['POST'])
+@course_bp.route('/api/enroll', methods=['POST'])
 def enroll():
     auth_header = request.headers.get('Authorization')
     if not auth_header:
@@ -65,7 +65,7 @@ def enroll():
         conn.close()
 
 # Get all courses the user is enrolled in
-@course_bp.route('/users/enrolled', methods=['GET'])
+@course_bp.route('/api/users/enrolled', methods=['GET'])
 def get_enrolled_courses():
     auth_header = request.headers.get('Authorization')
     if not auth_header:

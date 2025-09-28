@@ -4,7 +4,7 @@ from utils.token import verify_token
 
 user_bp = Blueprint('users', __name__)
 
-@user_bp.route('/profile', methods=['GET'])
+@user_bp.route('/api/profile', methods=['GET'])
 def profile():
     auth_header = request.headers.get('Authorization')
     if not auth_header:
@@ -51,7 +51,7 @@ def profile():
     })
 
 
-@user_bp.route('/submit_project', methods=['PUT'])
+@user_bp.route('/api/submit_project', methods=['PUT'])
 def submit_project():
     auth_header = request.headers.get('Authorization')
     if not auth_header:
@@ -83,7 +83,7 @@ def submit_project():
 
     return jsonify({'message': 'Project submitted successfully', 'project_url': project_url})
 
-@user_bp.route('/payment/qr', methods=['GET'])
+@user_bp.route('/api/payment/qr', methods=['GET'])
 def get_payment_qr():
     auth_header = request.headers.get('Authorization')
     if not auth_header:
@@ -99,7 +99,7 @@ def get_payment_qr():
 
     return jsonify({'qr_url': qr_url})
 
-@user_bp.route('/profile', methods=['PUT'])
+@user_bp.route('/api/profile', methods=['PUT'])
 def update_profile():
     auth_header = request.headers.get('Authorization')
     if not auth_header:

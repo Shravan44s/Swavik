@@ -6,7 +6,7 @@ auth_bp = Blueprint('auth', __name__)
 
 
 
-@auth_bp.route('/login', methods=['POST'])
+@auth_bp.route('/api/login', methods=['POST'])
 def login():
     data = request.json
     conn = get_connection()
@@ -23,7 +23,7 @@ def login():
         return jsonify({'error': 'Invalid credentials'}), 401
     
 
-@auth_bp.route('/register', methods=['POST'])
+@auth_bp.route('/api/register', methods=['POST'])
 def register():
     data = request.json
     conn = get_connection()

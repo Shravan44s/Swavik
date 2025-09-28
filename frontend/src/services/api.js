@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API = axios.create({
   baseURL: process.env.NODE_ENV === "production"
-    ? "https://www.swavik.co.in"
+    ? "http://www.swavik.co.in"
     : "http://127.0.0.1:8000",
 });
 

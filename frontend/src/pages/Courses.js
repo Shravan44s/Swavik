@@ -16,12 +16,12 @@ const Courses = () => {
     const fetchCourses = async () => {
       setLoading(true);
       try {
-        const res = await API.get('/courses');
+        const res = await API.get('/api/courses');
         setCourses(res.data);
 
         const token = localStorage.getItem('token');
         if (token) {
-          const enrolledRes = await API.get('/users/enrolled', {
+          const enrolledRes = await API.get('/api/users/enrolled', {
             headers: { Authorization: `Bearer ${token}` }
           });
           setEnrolledCourses(enrolledRes.data.map(c => c.course_id));
@@ -59,7 +59,7 @@ const Courses = () => {
 
     try {
       const token = localStorage.getItem('token');
-      await API.post('/enroll', { course_id: confirmEnrollCourse.course_id }, {
+      await API.post('/api/enroll', { course_id: confirmEnrollCourse.course_id }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMessage(`✅ Successfully enrolled in "${confirmEnrollCourse.course_name}"!`);

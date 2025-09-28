@@ -77,7 +77,7 @@ const Profile = () => {
     try {
       const token = localStorage.getItem('token');
       const res = await API.put(
-        '/submit_project',
+        '/api/submit_project',
         {
           course_id: projectCourseId,
           project_url: projectUrl

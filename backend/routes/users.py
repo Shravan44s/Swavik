@@ -99,7 +99,7 @@ def get_payment_qr():
 
     return jsonify({'qr_url': qr_url})
 
-@user_bp.route('/api/sprofile', methods=['PUT'])
+@user_bp.route('/api/profile', methods=['PUT'])
 def update_profile():
     auth_header = request.headers.get('Authorization')
     if not auth_header:

@@ -56,7 +56,7 @@ const Register = () => {
     setMessage(res.data.message);
     setError('');
     localStorage.setItem('token', res.data.token);
-    navigate('/api/dashboard');
+    navigate('/dashboard');
   } catch (error) {
     setError(error.response?.data?.error || 'Error submitting form');
     setMessage('');

@@ -50,19 +50,26 @@ const Register = () => {
     return;
   }
 
-  setLoading(true); // start loading
-  try {
-    const res = await API.post('/api/register', formData);
-    setMessage(res.data.message);
-    setError('');
-    localStorage.setItem('token', res.data.token);
-    navigate('/dashboard');
-  } catch (error) {
-    setError(error.response?.data?.error || 'Error submitting form');
-    setMessage('');
-  } finally {
-    setLoading(false); // stop loading
-  }
+  
+
+setLoading(true); // start loading
+try {
+  const res = await API.post('/api/register', formData);
+  setMessage(res.data.message);
+  setError('');
+
+  localStorage.setItem('token', res.data.token);
+  localStorage.setItem('user', JSON.stringify(res.data.user)); // ✅ store user
+
+  navigate('/dashboard');
+} catch (error) {
+  console.error('Register error:', error.response || error); // ✅ add for debugging
+  setError(error.response?.data?.error || 'Error submitting form');
+  setMessage('');
+} finally {
+  setLoading(false); // stop loading
+}
+
 };
 
 

@@ -27,14 +27,16 @@ def login():
 def register():
     data = request.json
     conn = get_connection()
-    cursor = conn.cursor()
-    
+    cursor = conn.cursor(dictionary=True)  # ✅ Use dictionary=True so we can return the user
+
     # Check if email exists
     cursor.execute("SELECT * FROM users WHERE email = %s", (data['email'],))
-    if cursor.fetchone():
+    existing_user = cursor.fetchone()
+    if existing_user:
+        conn.close()
         return jsonify({'error': 'Email already registered'}), 400
 
-    # Insert user
+    # Insert new user
     cursor.execute("""
       INSERT INTO users (name, email, phone_number, college_name, password_hash)
       VALUES (%s, %s, %s, %s, %s)
@@ -42,13 +44,22 @@ def register():
     conn.commit()
     
     user_id = cursor.lastrowid
+
+    # ✅ Fetch inserted user data so frontend has same structure as login
+    cursor.execute("SELECT * FROM users WHERE user_id = %s", (user_id,))
+    user = cursor.fetchone()
+
     token = generate_token(user_id)
     conn.close()
 
-    # Send welcome email (fail silently if error)
+    # Send welcome email (fail silently)
     try:
         send_welcome_email(data['email'], data['name'])
     except Exception as e:
         print("Email sending failed:", e)
 
-    return jsonify({'message': 'User registered successfully', 'token': token})
+    return jsonify({
+        'message': 'User registered successfully',
+        'token': token,
+        'user': user    # ✅ Now React gets the user object
+    }), 201
